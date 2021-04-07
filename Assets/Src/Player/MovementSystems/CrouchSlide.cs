@@ -26,12 +26,10 @@ public class CrouchSlide : MonoBehaviour
 
     public void Update()
     {
-        if (!this.movementData.IsActive(PlayerMovementStates.Sprinting))
-        {
-            return;
-        }
-
-        if (!this.crouchButton.IsPressed() && this.movementData.IsActive(PlayerMovementStates.CrouchSliding))
+        if (
+            ((!this.crouchButton.IsPressed() && this.movementData.IsActive(PlayerMovementStates.CrouchSliding)) ||
+            (this.movementData.IsActive(PlayerMovementStates.CrouchSliding) && !this.movementData.IsActive(PlayerMovementStates.Sprinting)))
+        )
         {
             // Stop slide
             this.movementData.SetInactive(PlayerMovementStates.CrouchSliding);
@@ -39,9 +37,11 @@ public class CrouchSlide : MonoBehaviour
             this.playerTransform.transform.localScale = CrouchUtil.unshrink(this.playerTransform.transform.localScale);
             this.playerMaterial.dynamicFriction *= 2;
             this.playerMaterial.staticFriction *= 2;
-            Debug.Log("Stopped slide");
         }
-        else if (this.crouchButton.IsPressed() && !this.movementData.IsActive(PlayerMovementStates.CrouchSliding))
+        else if (
+            this.crouchButton.IsPressed() &&
+            !this.movementData.IsActive(PlayerMovementStates.CrouchSliding) &&
+            this.movementData.IsActive(PlayerMovementStates.Sprinting))
         {
             // Start slide
             this.movementData.SetActive(PlayerMovementStates.CrouchSliding);
@@ -49,7 +49,6 @@ public class CrouchSlide : MonoBehaviour
             this.playerTransform.transform.localScale = CrouchUtil.shrink(this.playerTransform.transform.localScale);
             this.playerMaterial.dynamicFriction /= 2;
             this.playerMaterial.staticFriction /= 2;
-            Debug.Log("Started slide");
         }
 
         // Maintain slide
