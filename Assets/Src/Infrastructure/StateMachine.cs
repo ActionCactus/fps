@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System;
 
 
 namespace FPS.Infrastructure
 {
     // A directed cyclic graph.  Observable.
-    class StateMachine
+    public class StateMachine
     {
         public string Identity;
 
@@ -15,18 +16,20 @@ namespace FPS.Infrastructure
     }
 
     // Extension of StateMachine, but inputs come from state transitions of other state machines registered internally.
-    class CombinatorialStateMachine
+    public class CombinatorialStateMachine
     {
 
     }
 
-    class State
+    public class State
     {
-        protected string id { get; }
+        public List<State> References { get => references; }
+        protected Enum id;
         protected List<State> references;
 
-        public State()
+        public State(Enum id)
         {
+            this.id = id;
             this.references = new List<State>();
         }
 
@@ -42,10 +45,5 @@ namespace FPS.Infrastructure
 
             return this;
         }
-    }
-
-    class State<T> : State
-    {
-        protected new T id { get; }
     }
 }
