@@ -23,19 +23,24 @@ namespace FPS.Infrastructure
 
     public class State
     {
-        public List<State> References { get => references; }
+        public Dictionary<Enum, State> References { get => references; }
         protected Enum id;
-        protected List<State> references;
+        protected Dictionary<Enum, State> references;
 
         public State(Enum id)
         {
             this.id = id;
-            this.references = new List<State>();
+            this.references = new Dictionary<Enum, State>();
         }
 
         public State AcyclicRef(State state)
         {
-            this.references.Add(state);
+            if (this.references.ContainsKey(state.id))
+            {
+                throw new Exception($"State with ID {state.id} already added as a reference to {this.id}");
+            }
+            this.References[state.id] = state;
+
             return this;
         }
 
