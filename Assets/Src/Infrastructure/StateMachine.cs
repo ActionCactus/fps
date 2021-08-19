@@ -4,12 +4,25 @@ using System;
 
 namespace FPS.Infrastructure
 {
-    // A directed cyclic graph.  Observable.
+    public interface IStateChange
+    {
+
+    }
+
+    /// <summary>
+    /// A finite state machine represented as a directed cyclic graph.  Handles IStateChange events to
+    /// affect state transitions.
+    /// </summary>
     public class StateMachine
     {
-        public string Identity;
+        protected State root;
+        protected State current;
+        public StateMachine(State root)
+        {
+            this.current = this.root = root;
+        }
 
-        public StateMachine()
+        public void HandleChangeEvent(IStateChange changeEvent)
         {
 
         }
